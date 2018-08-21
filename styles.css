@@ -1,0 +1,46 @@
+li {
+  color: green;
+}
+h1 {
+    color: black;
+    font-family: arial;
+    font-size: 200%;
+}
+table {
+    border: 2px;
+}
+
+.table_header {
+    color:brown;
+    font-weight: lighter;
+    font-size:medium;
+}
+.title {
+    color:#a43434;
+}
+
+.txid a{
+    color:brown;
+    font-weight: lighter;
+    font-size:small;
+}
+.nulldata {
+    color:green;
+    font-weight: lighters;
+    font-size:medium;
+}
+.asm {
+    color:cadetblue;
+    font-weight: lighter;
+    font-size:x-small;
+}
+
+#console li {
+    color:green;
+    font-weight: lighter;
+    font-size:small;
+    padding-top: 10px;
+}
+html,body,h1,h2,h3,h4,h5 {
+  font-family: "Raleway", sans-serif
+}
