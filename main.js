@@ -11,7 +11,6 @@ function addData(chart, label, data) {
   // counter['other'] = {'total_messages':0}
 
     chart.data.labels.push(label);
-    console.log(chart.data.datasets)
     chart.data.datasets[0].data.push(data['memo']['total_messages']);
     chart.data.datasets[1].data.push(data['blockpress']['total_messages']);
     chart.data.datasets[2].data.push(data['other']['total_messages']);
@@ -28,6 +27,7 @@ function create_tx(){
 
       // instance of transaction builder
       let transactionBuilder = new BITBOX.TransactionBuilder('bitcoincash');
+
       // original amount of satoshis in vin
 
       let originalAmount = result[0].satoshis;
@@ -42,23 +42,15 @@ function create_tx(){
       transactionBuilder.addInput(txid, vout);
 
 
-      //let message = "prefix_tests\{12/123\}";
-      console.log("data: " + message);
       // let buf = BITBOX.Script.nullData.output.encode(Buffer.from(data, 'ascii'));
       data = memopress.encode('0x6d02', message);
-      console.log("data: " + data);
-
-      console.log("results: " + result);
       let data_len = data.length;
-      console.log("data size:" + data_len);
 
       // get byte count to calculate fee. paying 1 sat/byte
       let byteCount = BITBOX.BitcoinCash.getByteCount({ P2PKH: 1 }, { P2PKH: 1 }) + data_len + 10;
-      console.log("total bytes: " + byteCount);
 
       // amount to send to receiver. It's the original amount - 1 sat/byte for tx size
       let sendAmount = originalAmount - byteCount;
-      console.log("sendAmount: " + sendAmount);
 
       // add output w/ address and amount to send
       transactionBuilder.addOutput('bitcoincash:qpy3cc67n3j9rpr8c3yx3lv0qc9k2kmfyud9e485w2', sendAmount);
@@ -123,25 +115,6 @@ function beep(x) {
   };
 };
 
-// async function tx_listener(){
-//   let messages = [];
-//   let socket = new BITBOX.Socket({
-//     callback: () => {
-//       console.log('connected')
-//     }, restURL: 'https://rest.bitcoin.com'
-//   });
-//   socket.listen('transactions', (message) => {
-//     json = JSON.parse(message)
-//     messages.push(json)
-//     console.log(messages)
-//   });
-// };
-//
-// //start async tx_listerner
-// tx_listener();
-
-
-
 let socket = new BITBOX.Socket({
   callback: () => {
     console.log('connected')
@@ -171,17 +144,13 @@ socket.listen('transactions', (message) => {
   html_opreturn += "<div class='w3-bar-item'>";
   for(output in json.outputs){
     let asm = json.outputs[output].scriptPubKey.asm;
-    console.log("ASM:" + asm);
     let hex = json.outputs[output].scriptPubKey.hex;
     let outputclass = BITBOX.Script.classifyOutput(BITBOX.Script.fromASM(asm));
 
-    console.log("CLASS: " + outputclass);
     html += "<span class='w3-small asm'>"+ output + ": " + asm + "</span><br>"
     if( outputclass == "nulldata") {
       opreturn = true;
-
       let ascii = BITBOX.Script.nullData.output.decode(Buffer.from(hex, 'hex')).toString('ascii');
-    	console.log("ASCII: " + ascii);
       op_returns[txid] = {'ts':ts,'ascii':ascii,'hex':hex}
       beep(1);
 
@@ -190,7 +159,6 @@ socket.listen('transactions', (message) => {
 
       switch (prefix) {
         case '6d':
-          console.log("memo");
           ascii = ascii.substring(2);
           html += "<span class='w3-small nulldata'><i class='fa fa-comment w3-text-red w3-large'></i> <i class='fa fa-star w3-text-yellow w3-small'></i> MEMO: ("+sub_prefix+") "+ ascii +"</span><br>";
           html_opreturn += "<span class='w3-small nulldata'><i class='fa fa-comment w3-text-red w3-large'></i> <i class='fa fa-star w3-text-yellow w3-small'></i><a target='_blank' href=https://explorer.bitcoin.com/bch/tx/" + txid + "> MEMO: ("+ sub_prefix +") "+ascii +"</a></span><br>";
@@ -198,7 +166,6 @@ socket.listen('transactions', (message) => {
           counter['memo']['total_messages'] += 1;
           break;
         case '8d':
-          console.log("blockpress");
           ascii = ascii.substring(2);
           html += "<span class='w3-small nulldata'><i class='fa fa-comment w3-text-red w3-large'></i> BLOCKPRESS: ()"+ sub_prefix +") "+ascii +"</span><br>";
           html_opreturn += "<span class='w3-small nulldata'><i class='fa fa-comment w3-text-red w3-large'></i><a target='_blank' href=https://explorer.bitcoin.com/bch/tx/" + txid + "> BLOCKPRESS: ()"+ sub_prefix +") "+ascii +"</a></span><br>";
@@ -211,17 +178,6 @@ socket.listen('transactions', (message) => {
           counter['other']['total_messages'] += 1;
       };
       addData(myChart,ts, counter);
-      console.log(counter);
-      // if(asm.indexOf('OP_RETURN d60') !== -1){
-      //   html += "<span class='w3-small nulldata'><i class='fa fa-comment w3-text-red w3-large'></i> MEMO:"+ ascii +"</span><br>";
-      //   html_opreturn += "<span class='w3-small nulldata'><i class='fa fa-comment w3-text-red w3-large'></i><a target='_blank' href=https://explorer.bitcoin.com/bch/tx/" + txid + "> MEMO:"+ ascii +"</a></span><br>";
-      // }else if(asm.indexOf('OP_RETURN 8d') !== -1){
-      //   html += "<span class='w3-small nulldata'><i class='fa fa-comment w3-text-red w3-large'></i> BLOCKPRESS:"+ ascii +"</span><br>";
-      //   html_opreturn += "<span class='w3-small nulldata'><i class='fa fa-comment w3-text-red w3-large'></i><a target='_blank' href=https://explorer.bitcoin.com/bch/tx/" + txid + "> BLOCKPRESS:"+ ascii +"</a></span><br>";
-      // }{
-      //   html += "<span class='w3-small nulldata'><i class='fa fa-comment w3-text-red w3-large'></i> "+ ascii +"</span><br>";
-      //   html_opreturn += "<span class='w3-small nulldata'><i class='fa fa-comment w3-text-red w3-large'></i><a target='_blank' href=https://explorer.bitcoin.com/bch/tx/" + txid + "> "+ ascii +"</a></span><br>";
-      // };
       message_counter += 1;
     };
   };
