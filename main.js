@@ -25,7 +25,6 @@ function create_tx(){
       let transactionBuilder = new BITBOX.TransactionBuilder('bitcoincash');
 
       // original amount of satoshis in vin
-
       let originalAmount = result[0].satoshis;
 
       // index of vout
