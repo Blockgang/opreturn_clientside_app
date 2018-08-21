@@ -6,7 +6,7 @@
 # - add blockheight / new block function
 
 
-# USED Components:
+# Used Frameworks / Tools:
 # - http://browserify.org/
 # - https://developer.bitcoin.com/bitbox/docs/new.html
 # - 
