@@ -1,5 +1,5 @@
 memopress = require('memopress');
-BITBOXCli = require('bitbox-cli').default;
+BITBOXCli = require('bitbox-cli/lib/bitbox-cli').default;
 BITBOX = new BITBOXCli();
 
 var Chart = require('chart.js');
