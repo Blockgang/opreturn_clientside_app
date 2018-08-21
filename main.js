@@ -3,13 +3,9 @@ BITBOXCli = require('bitbox-cli').default;
 BITBOX = new BITBOXCli();
 
 var Chart = require('chart.js');
-//var myChart = new Chart();
+
 
 function addData(chart, label, data) {
-  // counter['memo'] = {'total_messages':0}
-  // counter['blockpress'] = {'total_messages':0}
-  // counter['other'] = {'total_messages':0}
-
     chart.data.labels.push(label);
     chart.data.datasets[0].data.push(data['memo']['total_messages']);
     chart.data.datasets[1].data.push(data['blockpress']['total_messages']);
