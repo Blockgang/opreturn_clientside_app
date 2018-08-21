@@ -247,8 +247,8 @@ socket.listen('transactions', (message) => {
     document.getElementById('opreturn_percentage').innerHTML =  opreturn_percentage + "%  (OP_RETURN)";
     document.getElementById('menu_opreturn_msg_count').innerHTML =  message_counter;
   };
-  document.getElementById('transaction_list').innerHTML = html + document.getElementById('transaction_list').innerHTML;
+  document.getElementById('transaction_list').innerHTML += html // + document.getElementById('transaction_list').innerHTML;
   if( opreturn ) {
-    document.getElementById('opreturn_list').innerHTML = html_opreturn + document.getElementById('opreturn_list').innerHTML;
+    document.getElementById('opreturn_list').innerHTML += html_opreturn //+ document.getElementById('opreturn_list').innerHTML;
   };
 });
