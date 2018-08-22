@@ -129,6 +129,12 @@ let transaction_counter = 0;
 let starttime = Math.floor(Date.now() / 1000);
 
 async function block_listener(){
+  var prev_ul = document.createElement('ul');
+  var prev_li = document.createElement('li');
+  prev_li.innerHTML = "<a href=''>click to load previous block...</a>";
+  prev_ul.appendChild(prev_li);
+  document.getElementById('transaction_list').appendChild(prev_ul);
+
   setInterval(function(){
     console.log("Check Blockheight")
     BITBOX.Blockchain.getBlockCount().then((result) => {
@@ -141,18 +147,22 @@ async function block_listener(){
           block_ul.classList.add('block_ul');
           block_ul.classList.add('w3-ul');
           block_ul.id = new_blockheight;
-          document.getElementById('transaction_list').appendChild(block_ul);
+          prev_ul.parentNode.insertBefore(block_ul,prev_ul);
 
           var header_li = document.createElement('li');
           header_li.classList.add('header_block_li');
           header_li.innerHTML = "Block "+ new_blockheight;
           block_ul.appendChild(header_li);
 
+
+          console.log("test" + blockheight);
+
           for(tx in txs){
             var tx = txs[tx]
             var li = document.getElementById(tx);
             header_li.parentNode.insertBefore(li,header_li.nextSibling);
           };
+
           console.log(txs);
         }, (err) => {
           console.log(err);
