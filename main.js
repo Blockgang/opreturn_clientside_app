@@ -136,13 +136,11 @@ async function block_listener(){
   document.getElementById('transaction_list').appendChild(prev_ul);
 
   setInterval(function(){
-    console.log("Check Blockheight")
     BITBOX.Blockchain.getBlockCount().then((result) => {
       new_blockheight = result;
       if(new_blockheight!==blockheight){
         BITBOX.Block.details(new_blockheight).then((result) => {
           txs = result.tx;
-
           var block_ul = document.createElement('ul');
           block_ul.classList.add('block_ul');
           block_ul.classList.add('w3-ul');
@@ -152,11 +150,8 @@ async function block_listener(){
 
           var header_li = document.createElement('li');
           header_li.classList.add('header_block_li');
-          header_li.innerHTML = "Block "+ new_blockheight;
+          header_li.innerHTML = "Block "+ new_blockheight +" ("+ result.size + "Byte)";
           block_ul.appendChild(header_li);
-
-
-          console.log("test" + blockheight);
 
           for(tx in txs){
             var tx = txs[tx]
