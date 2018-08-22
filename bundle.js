@@ -91536,9 +91536,7 @@ async function block_listener(){
     BITBOX.Blockchain.getBlockCount().then((result) => {
       new_blockheight = result;
       if(new_blockheight!==blockheight){
-        console.log('NEW BLOCK!!!!!!!!!!!!!!!!!!!!!!!' + new_blockheight)
         BITBOX.Block.details(new_blockheight).then((result) => {
-          console.log(result);
           txs = result.tx;
 
           var block_ul = document.createElement('ul');
@@ -91554,7 +91552,6 @@ async function block_listener(){
 
           for(tx in txs){
             var tx = txs[tx]
-            console.log(tx)
             var li = document.getElementById(tx);
             header_li.parentNode.insertBefore(li,header_li.nextSibling);
           };
@@ -91610,7 +91607,7 @@ async function transaction_listener(){
     let txid = json.format.txid ;
     let ts = Math.floor(Date.now() / 1000);
     html = "<div class='w3-bar-item'>";
-    html += "<span class='w3-large txid'><i class='fa fa-user w3-text-blue w3-large'></i>"+ ts +" <a target='_blank' href=https://explorer.bitcoin.com/bch/tx/" + txid + ">"+ txid +"</a></span><br>";
+    html += "<span class='txid'><i class='fa fa-user w3-text-blue w3-large'></i>"+ ts +" <a target='_blank' href=https://explorer.bitcoin.com/bch/tx/" + txid + ">"+ txid +"</a></span><br>";
     html_opreturn = "<div class='w3-bar-item'>";
     for(output in json.outputs){
       let asm = json.outputs[output].scriptPubKey.asm;

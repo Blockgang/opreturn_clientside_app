@@ -205,7 +205,7 @@ async function transaction_listener(){
     let txid = json.format.txid ;
     let ts = Math.floor(Date.now() / 1000);
     html = "<div class='w3-bar-item'>";
-    html += "<span class='w3-large txid'><i class='fa fa-user w3-text-blue w3-large'></i>"+ ts +" <a target='_blank' href=https://explorer.bitcoin.com/bch/tx/" + txid + ">"+ txid +"</a></span><br>";
+    html += "<span class='txid'><i class='fa fa-user w3-text-blue w3-large'></i>"+ ts +" <a target='_blank' href=https://explorer.bitcoin.com/bch/tx/" + txid + ">"+ txid +"</a></span><br>";
     html_opreturn = "<div class='w3-bar-item'>";
     for(output in json.outputs){
       let asm = json.outputs[output].scriptPubKey.asm;
