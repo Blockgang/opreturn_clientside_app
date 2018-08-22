@@ -91550,7 +91550,7 @@ async function block_listener(){
           block_ul.classList.add('w3-ul');
           block_ul.id = new_blockheight;
           prev_ul.parentNode.insertBefore(block_ul,prev_ul);
-          //document.getElementById('transaction_list').appendChild(block_ul);
+          mempool_ul.parentNode.insertBefore(block_ul,mempool_ul.nextSibling);
 
           var header_li = document.createElement('li');
           header_li.classList.add('header_block_li');
