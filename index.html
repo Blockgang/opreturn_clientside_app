@@ -3,8 +3,6 @@
   <head>
   	<title>BitcoinCash OP_RETURN 2.0</title>
   	<meta charset="UTF-8">
-  	<script src="main.js"></script>
-  	<script src="bundle.js"></script>
     <link rel="stylesheet" href="./styles.css">
     <!-- google -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -100,7 +98,7 @@
           <h5><b><i class="fa fa-dashboard"></i> Bitcoin Cash - Tx Data</b></h5>
         </header>
         <div class="w3-container">
-          <img class="w3-padding-8" width='100px' src='images/30.gif'>
+          <!-- <img class="w3-padding-8" width='100px' src='images/30.gif'> -->
           <ul id='transaction_list' class="w3-ul">
           </ul>
         </div>
@@ -115,7 +113,7 @@
           </header>
 
           <div class="w3-container">
-            <img class="w3-padding-8" width='100px' src='images/30.gif'>
+            <!-- <img class="w3-padding-8" width='100px' src='images/30.gif'> -->
             <ul id='opreturn_list' class="w3-ul">
             </ul>
           </div>
@@ -202,6 +200,8 @@
           return false;
         }
        </script>
+       <script src="bundle.js"></script>
+       <script src="main.js"></script>
        <script>
           var ctx = document.getElementById("myChart").getContext('2d');
           var myChart = new Chart(ctx, {

@@ -10,9 +10,22 @@ table {
     border: 2px;
 }
 
-.table_header {
-    color:brown;
-    font-weight: lighter;
+.header_mempool {
+    color:white;
+    background-color: cornflowerblue;
+    font-weight: bold;
+    font-size:medium;
+}
+.header_op_mempool {
+    color:white;
+    background-color: cornflowerblue;
+    font-weight: bold;
+    font-size:medium;
+}
+.header_block_li {
+    color:white;
+    background-color: cornflowerblue;
+    font-weight: bold;
     font-size:medium;
 }
 .title {

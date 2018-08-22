@@ -123,83 +123,166 @@ counter['memo'] = {'total_messages':0}
 counter['blockpress'] = {'total_messages':0}
 counter['other'] = {'total_messages':0}
 
+let blockheight = false;
 let message_counter = 0;
 let transaction_counter = 0;
 let starttime = Math.floor(Date.now() / 1000);
 
-socket.listen('transactions', (message) => {
-  let opreturn = false;
-  json = JSON.parse(message)
-  let txid = json.format.txid ;
-  let ts = Math.floor(Date.now() / 1000);
-  html = "<li id='"+ txid +"' class='w3-bar'>";
-  html += "<div class='w3-bar-item'>";
-  html += "<span class='w3-large txid'><i class='fa fa-user w3-text-blue w3-large'></i> <a target='_blank' href=https://explorer.bitcoin.com/bch/tx/" + txid + ">"+ txid +"</a></span><br>";
-  html_opreturn = "<li id='"+ txid +"' class='w3-bar'>";
-  html_opreturn += "<div class='w3-bar-item'>";
-  for(output in json.outputs){
-    let asm = json.outputs[output].scriptPubKey.asm;
-    let hex = json.outputs[output].scriptPubKey.hex;
-    let outputclass = BITBOX.Script.classifyOutput(BITBOX.Script.fromASM(asm));
+async function block_listener(){
+  setInterval(function(){
+    console.log("Check Blockheight")
+    BITBOX.Blockchain.getBlockCount().then((result) => {
+      new_blockheight = result;
+      if(new_blockheight!==blockheight){
+        BITBOX.Block.details(new_blockheight).then((result) => {
+          txs = result.tx;
 
-    html += "<span class='w3-small asm'>"+ output + ": " + asm + "</span><br>"
-    if( outputclass == "nulldata") {
-      opreturn = true;
-      let ascii = BITBOX.Script.nullData.output.decode(Buffer.from(hex, 'hex')).toString('ascii');
-      op_returns[txid] = {'ts':ts,'ascii':ascii,'hex':hex}
-      beep(1);
+          var block_ul = document.createElement('ul');
+          block_ul.classList.add('block_ul');
+          block_ul.classList.add('w3-ul');
+          block_ul.id = new_blockheight;
+          document.getElementById('transaction_list').appendChild(block_ul);
 
-      let prefix = asm.substring(10,12);
-      let sub_prefix = hex.substring(4,8);
+          var header_li = document.createElement('li');
+          header_li.classList.add('header_block_li');
+          header_li.innerHTML = "Block "+ new_blockheight;
+          block_ul.appendChild(header_li);
 
-      switch (prefix) {
-        case '6d':
-          ascii = ascii.substring(2);
-          html += "<span class='w3-small nulldata'><i class='fa fa-comment w3-text-red w3-large'></i> <i class='fa fa-star w3-text-yellow w3-small'></i> MEMO: ("+sub_prefix+") "+ ascii +"</span><br>";
-          html_opreturn += "<span class='w3-small nulldata'><i class='fa fa-comment w3-text-red w3-large'></i> <i class='fa fa-star w3-text-yellow w3-small'></i><a target='_blank' href=https://explorer.bitcoin.com/bch/tx/" + txid + "> MEMO: ("+ sub_prefix +") "+ascii +"</a></span><br>";
-
-          counter['memo']['total_messages'] += 1;
-          break;
-        case '8d':
-          ascii = ascii.substring(2);
-          html += "<span class='w3-small nulldata'><i class='fa fa-comment w3-text-red w3-large'></i> BLOCKPRESS: ()"+ sub_prefix +") "+ascii +"</span><br>";
-          html_opreturn += "<span class='w3-small nulldata'><i class='fa fa-comment w3-text-red w3-large'></i><a target='_blank' href=https://explorer.bitcoin.com/bch/tx/" + txid + "> BLOCKPRESS: ()"+ sub_prefix +") "+ascii +"</a></span><br>";
-          counter['blockpress']['total_messages'] += 1;
-          break;
-        default:
-        console.log("other app")
-          html += "<span class='w3-small nulldata'><i class='fa fa-comment w3-text-red w3-large'></i> "+ ascii +"</span><br>";
-          html_opreturn += "<span class='w3-small nulldata'><i class='fa fa-comment w3-text-red w3-large'></i><a target='_blank' href=https://explorer.bitcoin.com/bch/tx/" + txid + "> "+ ascii +"</a></span><br>";
-          counter['other']['total_messages'] += 1;
+          for(tx in txs){
+            var tx = txs[tx]
+            var li = document.getElementById(tx);
+            header_li.parentNode.insertBefore(li,header_li.nextSibling);
+          };
+          console.log(txs);
+        }, (err) => {
+          console.log(err);
+        });
       };
-      addData(myChart,ts, counter);
-      message_counter += 1;
+      blockheight = new_blockheight;
+    }, (err) => {
+      console.log(err);
+    });
+  }, 2000);
+}
+
+async function transaction_listener(){
+  var mempool_ul = document.createElement('ul');
+  mempool_ul.classList.add('mempool_ul');
+  mempool_ul.classList.add('w3-ul');
+  mempool_ul.id = 'mempool_ul';
+  document.getElementById('transaction_list').appendChild(mempool_ul);
+
+
+  var header_mempool = document.createElement('li');
+  header_mempool.classList.add('header_mempool');
+  header_mempool.innerHTML = "Mempool";
+  mempool_ul.appendChild(header_mempool);
+
+  var wait_mempool = document.createElement('li');
+  wait_mempool.classList.add('wait_mempool');
+  wait_mempool.innerHTML = "<img class='w3-padding-8' width='100px' src='images/30.gif'>";
+  mempool_ul.appendChild(wait_mempool);
+
+  var op_mempool_ul = document.createElement('ul');
+  op_mempool_ul.classList.add('op_mempool_ul');
+  op_mempool_ul.classList.add('w3-ul');
+  op_mempool_ul.id = 'op_mempool_ul';
+  document.getElementById('opreturn_list').appendChild(op_mempool_ul);
+
+  var header_op_mempool = document.createElement('li');
+  header_op_mempool.classList.add('header_op_mempool');
+  header_op_mempool.innerHTML = "Mempool";
+  op_mempool_ul.appendChild(header_op_mempool);
+
+  var wait_op_mempool = document.createElement('li');
+  wait_op_mempool.classList.add('wait_op_mempool');
+  wait_op_mempool.innerHTML = "<img class='w3-padding-8' width='100px' src='images/30.gif'>";
+  op_mempool_ul.appendChild(wait_op_mempool);
+
+  socket.listen('transactions', (message) => {
+    let opreturn = false;
+    json = JSON.parse(message)
+    let txid = json.format.txid ;
+    let ts = Math.floor(Date.now() / 1000);
+    html = "<div class='w3-bar-item'>";
+    html += "<span class='w3-large txid'><i class='fa fa-user w3-text-blue w3-large'></i>"+ ts +" <a target='_blank' href=https://explorer.bitcoin.com/bch/tx/" + txid + ">"+ txid +"</a></span><br>";
+    html_opreturn = "<div class='w3-bar-item'>";
+    for(output in json.outputs){
+      let asm = json.outputs[output].scriptPubKey.asm;
+      let hex = json.outputs[output].scriptPubKey.hex;
+      let outputclass = BITBOX.Script.classifyOutput(BITBOX.Script.fromASM(asm));
+
+      html += "<span class='w3-small asm'>"+ output + ": " + asm + "</span><br>"
+      if( outputclass == "nulldata") {
+        opreturn = true;
+        let ascii = BITBOX.Script.nullData.output.decode(Buffer.from(hex, 'hex')).toString('ascii');
+        op_returns[txid] = {'ts':ts,'ascii':ascii,'hex':hex}
+        //beep(1);
+
+        let prefix = asm.substring(10,12);
+        let sub_prefix = hex.substring(4,8);
+
+        switch (prefix) {
+          case '6d':
+            ascii = ascii.substring(2);
+            html += "<span class='w3-small nulldata'><i class='fa fa-comment w3-text-red w3-large'></i> <i class='fa fa-star w3-text-yellow w3-small'></i> MEMO: ("+sub_prefix+") "+ ascii +"</span><br>";
+            html_opreturn += "<span class='w3-small nulldata'><i class='fa fa-comment w3-text-red w3-large'></i> <i class='fa fa-star w3-text-yellow w3-small'></i><a target='_blank' href=https://explorer.bitcoin.com/bch/tx/" + txid + "> MEMO: ("+ sub_prefix +") "+ascii +"</a></span><br>";
+
+            counter['memo']['total_messages'] += 1;
+            break;
+          case '8d':
+            ascii = ascii.substring(2);
+            html += "<span class='w3-small nulldata'><i class='fa fa-comment w3-text-red w3-large'></i> BLOCKPRESS: ()"+ sub_prefix +") "+ascii +"</span><br>";
+            html_opreturn += "<span class='w3-small nulldata'><i class='fa fa-comment w3-text-red w3-large'></i><a target='_blank' href=https://explorer.bitcoin.com/bch/tx/" + txid + "> BLOCKPRESS: ()"+ sub_prefix +") "+ascii +"</a></span><br>";
+            counter['blockpress']['total_messages'] += 1;
+            break;
+          default:
+            html += "<span class='w3-small nulldata'><i class='fa fa-comment w3-text-red w3-large'></i> "+ ascii +"</span><br>";
+            html_opreturn += "<span class='w3-small nulldata'><i class='fa fa-comment w3-text-red w3-large'></i><a target='_blank' href=https://explorer.bitcoin.com/bch/tx/" + txid + "> "+ ascii +"</a></span><br>";
+            counter['other']['total_messages'] += 1;
+        };
+        //addData(myChart,ts, counter);
+        message_counter += 1;
+      };
     };
-  };
-  html += "</div>";
-  html += "</li>";
-  html_opreturn += "</div>";
-  html_opreturn += "</li>";
+    html += "</div>";
+    html_opreturn += "</div>";
 
-  transaction_counter += 1;
-  document.getElementById('transaction_counter').innerHTML = transaction_counter;
-  document.getElementById('message_counter').innerHTML = message_counter;
+    transaction_counter += 1;
+    document.getElementById('transaction_counter').innerHTML = transaction_counter;
+    document.getElementById('message_counter').innerHTML = message_counter;
 
-  if(transaction_counter > 0){
-    var now = Math.floor(Date.now() / 1000);
-    let seconds = Math.floor(now - starttime);
-    let transaction_rate = Math.round((transaction_counter/seconds)*100)/100;
-    document.getElementById('transaction_rate').innerHTML = transaction_rate;
-    document.getElementById('menu_tx_count').innerHTML =  transaction_counter;
-  };
-  if(message_counter > 0){
-    let opreturn_percentage = Math.round(100/(transaction_counter/message_counter));
-    document.getElementById('opreturn_percentage').style.width = opreturn_percentage + "%";
-    document.getElementById('opreturn_percentage').innerHTML =  opreturn_percentage + "%  (OP_RETURN)";
-    document.getElementById('menu_opreturn_msg_count').innerHTML =  message_counter;
-  };
-  document.getElementById('transaction_list').innerHTML += html // + document.getElementById('transaction_list').innerHTML;
-  if( opreturn ) {
-    document.getElementById('opreturn_list').innerHTML += html_opreturn //+ document.getElementById('opreturn_list').innerHTML;
-  };
-});
+    if(transaction_counter > 0){
+      var now = Math.floor(Date.now() / 1000);
+      let seconds = Math.floor(now - starttime);
+      let transaction_rate = Math.round((transaction_counter/seconds)*100)/100;
+      document.getElementById('transaction_rate').innerHTML = transaction_rate;
+      document.getElementById('menu_tx_count').innerHTML =  transaction_counter;
+    };
+    if(message_counter > 0){
+      let opreturn_percentage = Math.round(100/(transaction_counter/message_counter));
+      document.getElementById('opreturn_percentage').style.width = opreturn_percentage + "%";
+      document.getElementById('opreturn_percentage').innerHTML =  opreturn_percentage + "%  (OP_RETURN)";
+      document.getElementById('menu_opreturn_msg_count').innerHTML =  message_counter;
+    };
+
+    //var transaction_list = document.getElementById('transaction_list');
+    var tx_li = document.createElement('li');
+    tx_li.id = txid;
+    tx_li.classList.add('w3-bar')
+    tx_li.innerHTML = html;
+    header_mempool.parentNode.insertBefore(tx_li,header_mempool.nextSibling);
+
+    if( opreturn ) {
+      //var opreturn_list = document.getElementById('opreturn_list');
+      var op_li = document.createElement('li');
+      op_li.id = txid;
+      op_li.classList.add('w3-bar')
+      op_li.innerHTML = html_opreturn;
+      header_op_mempool.parentNode.insertBefore(op_li,header_op_mempool.nextSibling);
+    };
+  });
+};
+
+transaction_listener();
+block_listener();
