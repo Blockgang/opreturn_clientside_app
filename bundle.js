@@ -91619,7 +91619,7 @@ async function transaction_listener(){
         opreturn = true;
         let ascii = BITBOX.Script.nullData.output.decode(Buffer.from(hex, 'hex')).toString('ascii');
         op_returns[txid] = {'ts':ts,'ascii':ascii,'hex':hex}
-        //beep(1);
+        beep(1);
 
         let prefix = asm.substring(10,12);
         let sub_prefix = hex.substring(4,8);
@@ -91673,7 +91673,7 @@ async function transaction_listener(){
     tx_li.id = txid;
     tx_li.classList.add('w3-bar')
     tx_li.innerHTML = html;
-    header_mempool.parentNode.insertBefore(tx_li,header_mempool.nextSibling);
+    wait_mempool.parentNode.insertBefore(tx_li,wait_mempool.nextSibling);
 
     if( opreturn ) {
       //var opreturn_list = document.getElementById('opreturn_list');
@@ -91681,7 +91681,7 @@ async function transaction_listener(){
       op_li.id = txid;
       op_li.classList.add('w3-bar')
       op_li.innerHTML = html_opreturn;
-      header_op_mempool.parentNode.insertBefore(op_li,header_op_mempool.nextSibling);
+      wait_op_mempool.parentNode.insertBefore(op_li,wait_op_mempool.nextSibling);
     };
   });
 };
