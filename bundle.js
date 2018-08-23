@@ -91536,6 +91536,7 @@ function bitdb_get_opreturns(limit) {
       encoding: { b1: "hex" },
       find: {
         b1: { "$in": ["6d01", "6d02"] }
+        //"b2": { "$regex": "^error*$" }
       },
       project: {
         b1: 1, b2: 1, tx: 1, block_index: 1, _id: 0
