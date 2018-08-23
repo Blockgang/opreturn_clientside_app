@@ -4,6 +4,23 @@ BITBOX = new BITBOXCli();
 
 var Chart = require('chart.js');
 
+let socket = new BITBOX.Socket({
+  callback: () => {
+    console.log('connected')
+  }, restURL: 'https://rest.bitcoin.com'
+});
+let op_returns = {};
+let counter = {};
+
+counter['memo'] = {'total_messages':0}
+counter['blockpress'] = {'total_messages':0}
+counter['other'] = {'total_messages':0}
+
+let blockheight = false;
+let message_counter = 0;
+let transaction_counter = 0;
+let starttime = Math.floor(Date.now() / 1000);
+
 
 function addData(chart, label, data) {
     chart.data.labels.push(label);
@@ -110,23 +127,65 @@ function beep(x) {
   };
 };
 
-let socket = new BITBOX.Socket({
-  callback: () => {
-    console.log('connected')
-  }, restURL: 'https://rest.bitcoin.com'
-});
+function bitdb_get_opreturns(limit) {
+  console.log(limit);
+  var query = {
+    request: {
+      encoding: { b1: "hex" },
+      find: {
+        b1: { "$in": ["6d01", "6d02"] }
+      },
+      project: {
+        b1: 1, b2: 1, tx: 1, block_index: 1, _id: 0
+      },
+      limit: limit
+    },
+    response: {
+      encoding: {
+        b1: "hex",
+        b2: "utf8"
+      }
+    }
+  };
+  var b64 = btoa(JSON.stringify(query));
+  var url = "https://bitdb.network/q/" + b64;
 
-let op_returns = {};
+  var header = {
+    headers: { key: "qz6qzfpttw44eqzqz8t2k26qxswhff79ng40pp2m44" }
+  };
 
-let counter = {}
-counter['memo'] = {'total_messages':0}
-counter['blockpress'] = {'total_messages':0}
-counter['other'] = {'total_messages':0}
+  fetch(url, header).then(function(r) {
+    return r.json()
+  }).then(function(r) {
 
-let blockheight = false;
-let message_counter = 0;
-let transaction_counter = 0;
-let starttime = Math.floor(Date.now() / 1000);
+    document.getElementById('bitdb_output').innerHTML = ""
+
+    var li = document.createElement('li');
+    li.innerHTML = "CONFIRMED:"
+    document.getElementById('bitdb_output').appendChild(li);
+
+    for(i in r['confirmed']){
+      var tx = r['confirmed'][i]
+      console.log(tx)
+      var li = document.createElement('li');
+      li.innerHTML = JSON.stringify(tx);
+      document.getElementById('bitdb_output').appendChild(li);
+    };
+
+    var li = document.createElement('li');
+    li.innerHTML = "UNCONFIRMED:"
+    document.getElementById('bitdb_output').appendChild(li);
+
+    for(i in r['unconfirmed']){
+      var tx = r['unconfirmed'][i]
+      console.log(tx)
+      var li = document.createElement('li');
+      li.innerHTML = JSON.stringify(tx);
+      document.getElementById('bitdb_output').appendChild(li);
+    };
+  })
+};
+
 
 async function block_listener(){
   var prev_ul = document.createElement('ul');
@@ -168,7 +227,7 @@ async function block_listener(){
     }, (err) => {
       console.log(err);
     });
-  }, 2000);
+  }, 3000);
 }
 
 async function transaction_listener(){

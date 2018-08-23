@@ -47,7 +47,9 @@
         <a onclick="toggle('txdata');" href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa fa-database w3-large"></i>&nbsp;All Transactions&nbsp;&nbsp;&nbsp;(<span id="menu_tx_count">0</span>)</a>
         <a onclick="toggle('opreturn');" href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa fa-database w3-large"></i>&nbsp;OP_RETURN Outputs&nbsp;&nbsp;&nbsp;(<i class="fa fa fa-comment w3-large"></i>&nbsp;<span id="menu_opreturn_msg_count">0</span>)</a>
         <a onclick="toggle('charts');" href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa fa-database w3-large"></i>&nbsp;Charts</a>
-        <a onclick="toggle('txbuilder');" href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa fa-comment w3-large"></i>&nbsp;Transaction Builder</a>
+        <a onclick="toggle('txbuilder');" href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa fa-arrow-right w3-large"></i>&nbsp;Transaction Builder</a>
+        <a onclick="toggle('bitdb');" href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa fa-arrow-right w3-large"></i>&nbsp;BitDB Prefix Listener</a>
+        <a onclick="toggle('wormhole');" href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa fa-arrow-right w3-large"></i>&nbsp;Wormhole</a>
       </div>
     </nav>
 
@@ -145,6 +147,20 @@
             <div>
               <ul id='console' class="w3-ul">
               </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- !PAGE! -->
+      <div class="w3-main" style="margin-left:300px;margin-top:43px;">
+        <div class="tab w3-container" id="bitdb" style="display:none;">
+          <header class="w3-container" style="padding-top:22px">
+            <h5><b><i class="fa fa-dashboard"></i> Bitcoin Cash - BitDB</b></h5>
+          </header>
+          <div class="w3-container">
+            <button onclick="bitdb_get_opreturns(200)">LOAD 200 TX FROM BITDB</button>
+            <div id="bitdb_output">
             </div>
           </div>
         </div>

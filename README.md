@@ -9,4 +9,4 @@
 # Used Frameworks / Tools:
 # - http://browserify.org/
 # - https://developer.bitcoin.com/bitbox/docs/new.html
-# - 
+# - https://bitdb.network/
