@@ -291,8 +291,8 @@ async function transaction_listener(){
         switch (prefix) {
           case '6d':
             ascii = ascii.substring(2);
-            html += "<span class='w3-small nulldata'><i class='fa fa-comment w3-text-red w3-large'></i> <i class='fa fa-star w3-text-yellow w3-small'></i><a href='https://memo.cash/post/" +txid+ "'>MEMO</a>: ("+sub_prefix+") "+ ascii +"</span><br>";
-            html_opreturn += "<span class='w3-small nulldata'><i class='fa fa-comment w3-text-red w3-large'></i> <i class='fa fa-star w3-text-yellow w3-small'></i><a target='_blank' href=https://explorer.bitcoin.com/bch/tx/" + txid + "> MEMO: ("+ sub_prefix +") "+ascii +"</a></span><br>";
+            html += "<span class='w3-small nulldata'><i class='fa fa-comment w3-text-red w3-large'></i> <i class='fa fa-star w3-text-yellow w3-small'></i><a target='_blank' href='https://memo.cash/post/" +txid+ "'>MEMO</a>: ("+sub_prefix+") "+ ascii +"</span><br>";
+            html_opreturn += "<span class='w3-small nulldata'><i class='fa fa-comment w3-text-red w3-large'></i> <i class='fa fa-star w3-text-yellow w3-small'></i><a target='_blank' href=https://explorer.bitcoin.com/bch/tx/" + txid + "><a target='_blank' href='https://memo.cash/post/" +txid+ "'>MEMO</a>: ("+ sub_prefix +") "+ascii +"</a></span><br>";
 
             counter['memo']['total_messages'] += 1;
             break;
