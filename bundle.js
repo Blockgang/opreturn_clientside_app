@@ -91539,7 +91539,7 @@ function bitdb_get_opreturns(limit) {
         //"b2": { "$regex": "^error*$" }
       },
       project: {
-        b1: 1, b2: 1, tx: 1, block_index: 1, _id: 0
+        b0:1 ,b1: 1, b2: 1, tx: 1, block_index: 1, _id: 0
       },
       limit: limit
     },
