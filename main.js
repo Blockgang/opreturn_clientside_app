@@ -149,7 +149,7 @@ function bitdb_get_opreturns(limit) {
     }
   };
   var b64 = btoa(JSON.stringify(query));
-  var url = "https://bitdb.network/q/" + b64;
+  var url = "https://bitdb.network/v2/q/" + b64;
 
   var header = {
     headers: { key: "qz6qzfpttw44eqzqz8t2k26qxswhff79ng40pp2m44" }
