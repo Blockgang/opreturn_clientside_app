@@ -57,15 +57,6 @@ function create_tx(){
       // let buf = BITBOX.Script.nullData.output.encode(Buffer.from(data, 'ascii'));
       data = memopress.encode('0x6d02', message);
 
-
-      // let buf = new Buffer('#BCHForEveryone');
-      //   // create array w/ OP_RETURN code and text buffer and encode
-      // let data = BITBOX.Script.encode([
-      //     BITBOX.Script.opcodes.OP_RETURN,
-      //     buf
-      // ])
-      // console.log("teeeeest: " + buf)
-      // console.log("teeeeest: " + data)
       let data_len = data.length;
 
       // get byte count to calculate fee. paying 1 sat/byte

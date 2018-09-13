@@ -91461,6 +91461,7 @@ function create_tx(){
 
 
       // let buf = new Buffer('#BCHForEveryone');
+      // console.log(buf);
       //   // create array w/ OP_RETURN code and text buffer and encode
       // let data = BITBOX.Script.encode([
       //     BITBOX.Script.opcodes.OP_RETURN,
