@@ -10,6 +10,10 @@
     <!-- Moneybutton -->
     <script src="https://api.moneybutton.com/moneybutton.js"></script>
 
+    <!--WebTorrent -->
+    <script src="https://cdn.jsdelivr.net/webtorrent/latest/webtorrent.min.js"></script>
+    <script src="webtorrent.js"></script>
+
     <!-- bootstrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -174,7 +178,7 @@
             <h5><b><i class="fa fa-dashboard"></i> Bitcoin Cash - BitDB</b></h5>
           </header>
           <div class="w3-container">
-            <button onclick="bitdb_get_opreturns(200)">LOAD 200 TX FROM BITDB</button>
+            <button onclick="bitdb_get_magnetlinks(200)">LOAD 200 TX FROM BITDB + MAGNET </button>
             <div id="bitdb_output">
             </div>
           </div>
