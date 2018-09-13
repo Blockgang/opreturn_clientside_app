@@ -67,7 +67,7 @@ function bitdb_get_magnetlinks(limit) {
       var li = document.createElement('li');
       li.innerHTML = JSON.stringify(tx);
       console.log(tx.b2);
-      get_magnetlink(tx.b2);
+      // get_magnetlink(tx.b2);
       document.getElementById('bitdb_output').appendChild(li);
     };
 
